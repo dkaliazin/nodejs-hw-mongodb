@@ -5,7 +5,7 @@ import cors from 'cors';
 import dotenv from "dotenv";
 import { env } from './utils/env.js';
 import { getAllContacts, getContactById } from './services/contact.js';
-import contactsRouter from `./routers/contact.js`
+import contactsRouter from './routers/contact.js';
 dotenv.config();
 
 
