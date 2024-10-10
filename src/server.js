@@ -4,8 +4,8 @@ import pino from 'pino-http';
 import cors from 'cors';
 import dotenv from "dotenv";
 import { env } from './utils/env.js';
-import { getAllStudents, getStudentById } from './services/students.js';
 import { getAllContacts, getContactById } from './services/contact.js';
+import contactsRouter from `./routers/contact.js`
 dotenv.config();
 
 
@@ -57,6 +57,7 @@ export const startServer = () => {
             message: 'Hello world',
         })
     });
+    app.use(contactsRouter); //router
     app.use((err, req, res, next) => {
         res.status(500).json({
             message: 'Something went wrong',
