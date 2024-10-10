@@ -4,7 +4,7 @@ import pino from 'pino-http';
 import cors from 'cors';
 import dotenv from "dotenv";
 import { env } from './utils/env.js';
-import { getAllStudents, getStudentById } from './services/students.js';
+
 import { getAllContacts, getContactById } from './services/contact.js';
 dotenv.config();
 
