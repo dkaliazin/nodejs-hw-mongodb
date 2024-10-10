@@ -36,7 +36,7 @@ export const startServer = () => {
         const { contactId } = req.params;
         const contact = await getContactById(contactId);
         if (!contact) {
-            req.status(404).json({
+            res.status(404).json({
                 message: 'contact wasnt found'
             });
             res.status(200).json({
