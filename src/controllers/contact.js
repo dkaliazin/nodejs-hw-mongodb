@@ -1,26 +1,28 @@
-import { getAllContacts,getContactById } from "../services/contact.js";
-export const getContactsController = async (req, res) => {
-  const contacts = await getAllContacts();
+import { getAllContacts, getContactById } from "../services/contact.js";
+import createHttpError from 'http-errors';
 
-  res.json({
-    status: 200,
-    message: 'Successfully found contacts!',
-    data: contacts,
-  });
+export const getContactsController = async (req, res) => {
+  try {
+    const contacts = await getAllContacts();
+
+    res.json({
+      status: 200,
+      message: 'Successfully found contacts!',
+      data: contacts,
+    });
+  }
+  catch (err) {
+    next(err);
+  }
 };
 
-export const getContactByIdController = async (req, res) => {
+export const getContactByIdController = async (req, res, next,) => {
   const { contactId } = req.params;
   const contact = await getContactById(contactId);
 
-  // Відповідь, якщо контакт не знайдено
   if (!contact) {
-    res.status(404).json({
-	    message: 'contact not found'
-    });
-    return;
+    throw createHttpError(404, 'contact not found');
   }
-
   // Відповідь, якщо контакт знайдено
   res.json({
     status: 200,

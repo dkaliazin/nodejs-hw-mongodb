@@ -6,6 +6,9 @@ import dotenv from "dotenv";
 import { env } from './utils/env.js';
 import { getAllContacts, getContactById } from './services/contact.js';
 import contactsRouter from './routers/contact.js';
+import * as contactServices from "./services/contact.js";
+import { errorHandler } from './middlewares/errorHandler.js';
+import { notFoundHandler } from './middlewares/notFoundHandler.js';
 dotenv.config();
 
 
@@ -32,19 +35,21 @@ export const startServer = () => {
             data: contacts,
         });
     });
-    app.get('contacts/:contactId', async (req, res, next) => {
-        const { contactId } = req.params;
-        const contact = await getContactById(contactId);
-        if (!contact) {
-            res.status(404).json({
-                message: 'contact wasnt found'
-            });
-            res.status(200).json({
-                status: 200,
-                message: 'Successfully found contacts!',
-                data: contact,
-            });
-        };
+    app.get("/contacts/:contactId", async(req, res)=> {
+         const {contactId} = req.params;
+         const data = await contactServices.getContactById(contactId);
+
+         if(!data) {
+             return res.status(404).json({
+                 message: `Contact with id=${contactId} not found`
+             });
+         }
+
+         res.json({
+             status: 200,
+             message: `Contact with ${contactId} successfully find`,
+             data,
+         });
     });
 
     app.use((req, res, next) => {
@@ -57,7 +62,11 @@ export const startServer = () => {
             message: 'Hello world',
         })
     });
+
     app.use(contactsRouter); //router
+    app.use('*', notFoundHandler);
+    app.use(errorHandler);
+
     app.use((err, req, res, next) => {
         res.status(500).json({
             message: 'Something went wrong',
