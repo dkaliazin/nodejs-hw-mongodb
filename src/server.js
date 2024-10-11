@@ -24,33 +24,10 @@ export const startServer = () => {
             },
         }),
     );
-    app.use(express.json());
-
-    app.get('/contacts', async (req, res) => {
-        const contacts = await getAllContacts();
-        console.log('Contacts fetched:', contacts); //test
-        res.status(200).json({
-            status: 200,
-            message: 'Successfully found contacts!',
-            data: contacts,
-        });
-    });
-    app.get("/contacts/:contactId", async(req, res)=> {
-         const {contactId} = req.params;
-         const data = await contactServices.getContactById(contactId);
-
-         if(!data) {
-             return res.status(404).json({
-                 message: `Contact with id=${contactId} not found`
-             });
-         }
-
-         res.json({
-             status: 200,
-             message: `Contact with ${contactId} successfully find`,
-             data,
-         });
-    });
+    app.use(express.json({
+        type: ['application/json', 'application/vnd.api+json'],
+        limit:'100kb',
+    }));
 
     app.use((req, res, next) => {
         console.log(`Time: ${new Date().toLocaleString()}`);
@@ -62,7 +39,7 @@ export const startServer = () => {
             message: 'Hello world',
         })
     });
-
+    //routers
     app.use(contactsRouter); //router
     app.use('*', notFoundHandler);
     app.use(errorHandler);
