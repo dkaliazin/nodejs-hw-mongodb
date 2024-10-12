@@ -45,7 +45,7 @@ export const startServer = () => {
         })
     });
     //routers
-    app.use('/contacts', contactsRouter); //contactrouter
+    app.use('/contacts', contactRouter); //contactrouter
     app.use('/auth',authRouter); //authrouter
     /*app.use(router);*/
     app.use('*', notFoundHandler);
