@@ -7,6 +7,7 @@ import { loginUserController } from '../controllers/auth.js';
 import { loginUserSchema } from '../validation/auth.js';
 import { logoutUserController } from '../controllers/auth.js';
 import { refreshUserSessionController } from '../controllers/auth.js';
+
 import router from './contact.js';
 const authRouter = Router();
 
