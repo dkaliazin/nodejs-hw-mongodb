@@ -6,9 +6,9 @@ import { SORT_ORDER } from "../constants/index.js";
 export const getAllContacts = async ({ page, perPage,sortOrder = SORT_ORDER.ASC, sortBy = '_id',}) => {
     const limit = perPage;
     const skip = (page - 1) * perPage;
-    const contactsQuery = ContactsCollection.find()
+    const contactsQuery = ContactsCollection.find({ userId })
     const contactsCount = await ContactsCollection
-        .find()
+        .find({ userId })
         .merge(contactsQuery)
         .countDocuments();
     const contacts = await contactsQuery
@@ -30,7 +30,7 @@ export const getContactById = async (id) => {
     }
 
     try {
-        const contact = await ContactsCollection.findById(id);
+        const contact = await ContactsCollection.findById({ _id: id, userId });
         return contact;
     } catch (error) {
         console.error('error trying find contact:', error);
@@ -44,13 +44,13 @@ export const createContact = async(payload) => {
 }
 //deleteContact
 export const deleteContact = async (contactId) => {
-    const contact = await ContactsCollection.findOneAndDelete({ _id: contactId, });
+    const contact = await ContactsCollection.findOneAndDelete({ _id: contactId, userId });
     return contact;
 }
 //updateContact
 export const updateContact = async (contactId, payload, options = {}) => {
     const contact = await ContactsCollection.findOneAndUpdate(
-        { _id: contactId },
+        { _id: contactId, userId },
         payload,
         {
             new: true,
