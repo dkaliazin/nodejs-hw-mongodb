@@ -7,17 +7,17 @@ export const getAllContacts = async () => {
 }
 //getContactById
 export const getContactById = async (id) => {
-    if (!mongoose.Types.ObjectId.isValid(id)) {
+    /*if (!mongoose.Types.ObjectId.isValid(id)) {
         return null;
     }
 
-    try {
+    try {*/
         const contact = await ContactsCollection.findById(id);
         return contact;
-    } catch (error) {
+    /*} catch (error) {
         console.error('error trying find contact:', error);
         return null;
-    }
+    }*/
 };
 //createContact
 export const createContact = async(payload) => {
