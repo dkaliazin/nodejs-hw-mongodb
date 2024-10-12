@@ -40,22 +40,13 @@ export const startServer = () => {
         })
     });
     //routers
-    app.use(contactsRouter); //router
+    app.use('/contacts',contactsRouter); //router
     app.use('*', notFoundHandler);
     app.use(errorHandler);
 
-    app.use((err, req, res, next) => {
-        res.status(500).json({
-            message: 'Something went wrong',
-        });
-    });
     app.listen(port, () => {
         console.log(`Server is running on port ${port}`);
     })
-    app.use('*', (req, res, next) => {
-        res.status(404).json({
-            message: 'Route not found',
-        });
-    });
+
 };
 
