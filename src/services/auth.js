@@ -2,13 +2,15 @@ import { UsersCollection } from '../db/models/user.js';
 import bcrypt from 'bcrypt';
 import createHttpError from 'http-errors';
 import { randomBytes } from 'crypto';
-import { FIFTEEN_MINUTES, ONE_DAY } from '../constants/index.js';
+import { FIFTEEN_MINUTES, ONE_DAY, THIRTY_DAYS } from '../constants/index.js';
 import { SessionsCollection } from '../db/models/session.js';
 
 //register
 export const registerUser = async (payload) => {
-    const encryptedPassword = await bcrypt.hash(payload.password, 10);
+
     const user = await UsersCollection.findOne({ email: payload.email });
+    const encryptedPassword = await bcrypt.hash(payload.password, 10);
+
     if (user) throw createHttpError(409, 'Email is using by other user');
     return await UsersCollection.create(
         {
