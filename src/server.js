@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 import { env } from './utils/env.js';
 import { getAllContacts, getContactById } from './services/contact.js';
 import contactsRouter from './routers/contact.js';
-
+import cookieParser from 'cookie-parser';
 import * as contactServices from "./services/contact.js";
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
@@ -19,6 +19,7 @@ export const startServer = () => {
     const port = Number(env('port', '3000'));
     /**/
     app.use(cors());
+    app.use(cookieParser());
     app.use(
         pino({
             transport: {
