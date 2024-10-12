@@ -12,19 +12,19 @@ import { validateBody } from "../middlewares/validateBody.js";
 import { createContactSchema } from "../validation/contact.js";
 import { updateContact } from "../services/contact.js";
 import { isValidId } from "../middlewares/isValidId.js";
-const router = Router();
+const contactRouter = Router();
 
-router.get('/', ctrlWrapper(getContactsController));
-router.get('/:contactId', isValidId, ctrlWrapper(getContactByIdController));
+contactRouter.get('/', ctrlWrapper(getContactsController));
+contactRouter.get('/:contactId', isValidId, ctrlWrapper(getContactByIdController));
 /*router.post('/', validateBody(createContactSchema), ctrlWrapper(createContactController));*/
-router.post('/', validateBody(createContactSchema), ctrlWrapper(createContactController));
+contactRouter.post('/', validateBody(createContactSchema), ctrlWrapper(createContactController));
 /*router.post('/', ctrlWrapper(createContactController));*/
-router.delete('/:contactId', ctrlWrapper(deleteContactController));
+contactRouter.delete('/:contactId', ctrlWrapper(deleteContactController));
 /*router.put('/:contactId',validateBody(createContactSchema), ctrlWrapper(upsertContactController));
 router.patch('/:contactId',validateBody(createContactSchema), ctrlWrapper(patchContactController));*/
-router.put('/:contactId',validateBody(createContactSchema), ctrlWrapper(upsertContactController));
-router.patch('/:contactId',validateBody(createContactSchema), ctrlWrapper(patchContactController));
+contactRouter.put('/:contactId',validateBody(createContactSchema), ctrlWrapper(upsertContactController));
+contactRouter.patch('/:contactId',validateBody(createContactSchema), ctrlWrapper(patchContactController));
 
 /*router.put('/:contactId',ctrlWrapper(upsertContactController));
 router.patch('/:contactId',ctrlWrapper(patchContactController));*/
-export default router;
+export default contactRouter;
