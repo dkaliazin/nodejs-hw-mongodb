@@ -4,28 +4,23 @@ import { parsePaginationParams } from "../utils/parsePaginationParams.js";
 import { parseSortParams } from "../utils/parseSortParams.js";
 //getAllContacts
 export const getContactsController = async (req, res, next) => {
+  const { page, perPage } = parsePaginationParams(req.query);
+  const { sortBy, sortOrder } = parseSortParams(req.query);
 
-  try {
-    const { page, perPage } = parsePaginationParams(req.query);
-    const { sortBy, sortOrder } = parseSortParams(req.query);
-    const contacts = await getAllContacts({
-      page,
-      perPage,
-      sortBy,
-      sortOrder,
-      userId: req.user._id,
+  const { _id: userId } = req.user;
+
+  const data = await getAllContacts({
+    page,
+    perPage,
+    sortBy,
+    sortOrder,
   });
-    //console.log test
-    console.log('User ID in controller:', req.user._id);
-    res.json({
-      status: 200,
-      message: 'Successfully found contacts!',
-      data: contacts,
-    });
-  }
-  catch (err) {
-    next(err);
-  }
+
+  res.json({
+    status: 200,
+    message: "Successfully found contacts!",
+    data,
+  });
 };
 //getContactById
 export const getContactByIdController = async (req, res, next,) => {
