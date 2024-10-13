@@ -1,5 +1,5 @@
 import createHttpError from 'http-errors';
-
+import mongoose from 'mongoose';
 import { SessionsCollection } from '../db/models/session.js';
 import { UsersCollection } from '../db/models/user.js';
 import { findSessionByAccessToken } from '../services/auth.js';
@@ -29,11 +29,15 @@ export const authenticate = async (req, res, next) => {
     new Date() > new Date(session.accessTokenValidUntil);
 
   if (isAccessTokenExpired) {
-     return next(createHttpError(401, 'Access token expired'));
-  }
-
+  return next(createHttpError(401, 'Access token expired'));
+}
+  //check userid
+  console.log('Session:', session);
+  console.log('User ID:', session.userId);
+  //userId
   const user = await UsersCollection.findById(session.userId);
-
+  //check user
+  console.log('user:', user);
   if (!user) {
     next(createHttpError(401));
     return;

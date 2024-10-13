@@ -1,6 +1,8 @@
 import { registerUser } from '../services/auth.js';
 import { ONE_DAY } from '../constants/index.js';
 import { refreshUsersSession } from '../services/auth.js';
+import { loginUser } from '../services/auth.js';
+import { logoutUser } from '../services/auth.js';
 
 export const registerUserController = async (req, res) => {
   const user = await registerUser(req.body);
@@ -11,8 +13,7 @@ export const registerUserController = async (req, res) => {
     data: user,
   });
 };
-import { loginUser } from '../services/auth.js';
-import { logoutUser } from '../services/auth.js';
+
 
 export const loginUserController = async (req, res) => {
   const session = await loginUser(req.body);

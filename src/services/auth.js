@@ -87,6 +87,7 @@ export const refreshUsersSession = async ({ sessionId, refreshToken }) => {
     ...newSession,
   });
 };
+//findSessionByAccessToken
 export const findSessionByAccessToken = async (token) => {
   return await SessionsCollection.findOne({ accessToken: token });
 };
