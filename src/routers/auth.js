@@ -12,6 +12,7 @@ import { requestResetEmailSchema } from '../validation/auth.js';
 import { requestResetEmailController } from '../controllers/auth.js';
 import { resetPasswordSchema } from '../validation/auth.js';
 import { resetPasswordController } from '../controllers/auth.js';
+import { upload } from '../middlewares/multer.js';
 const authRouter = Router();
 authRouter.post(
   '/register',
