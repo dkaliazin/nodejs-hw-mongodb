@@ -1,0 +1,11 @@
+{
+    "web":{
+    "client_id":"1002892481141-6kfih6ogetkmvq6r7hp8otkp99rm8vod.apps.googleusercontent.com",
+    "project_id":"hw-7-swagger",
+    "auth_uri":"https://accounts.google.com/o/oauth2/auth",
+    "token_uri":"https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs",
+    "client_secret":"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",
+    "redirect_uris":["http://localhost:3000/confirm-google-auth"]
+
+}}
