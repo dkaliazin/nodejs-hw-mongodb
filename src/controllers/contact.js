@@ -80,6 +80,7 @@ export const patchContactController = async (req, res, next) => {
   const { _id: userId } = req.user;
 
   const photo = req.file;
+
   let photoUrl;
   if (photo) {
     if (env('ENABLE_CLOUDINARY') === 'true') {
@@ -89,12 +90,17 @@ export const patchContactController = async (req, res, next) => {
     }
   }
 
-  const updatedData = {
-    ...req.body,
-    ...(photoUrl && { photo: photoUrl }),
-  };
+  const updatePayload = { ...req.body };
 
-  const result = await updateContact(contactId, userId, updatedData);
+  if (!req.body.phoneNumber) {
+    delete updatePayload.phoneNumber;
+  }
+
+  if (photoUrl) {
+    updatePayload.photo = photoUrl;
+  }
+
+  const result = await updateContact(contactId, userId, updatePayload);
   if (!result) {
     throw createHttpError(404, `Contact with id=${contactId} not found`);
   }
