@@ -22,10 +22,7 @@ contactRouter.post('/', validateBody(createContactSchema), ctrlWrapper(createCon
 contactRouter.delete('/:contactId', ctrlWrapper(deleteContactController));
 contactRouter.put('/:contactId',validateBody(createContactSchema), ctrlWrapper(upsertContactController));
 contactRouter.patch('/:contactId',validateBody(createContactSchema), ctrlWrapper(patchContactController));
-contactRouter.post(
-  '/register',
-  validateBody(createContactSchema),
-  ctrlWrapper(createContactController),
+contactRouter.post('/register',validateBody(createContactSchema), ctrlWrapper(createContactController),
 );
 
 
