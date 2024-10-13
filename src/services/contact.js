@@ -3,39 +3,53 @@ import mongoose from 'mongoose';
 import { calculationPaginationData } from "../utils/calculatePaginationData.js";
 import { SORT_ORDER } from "../constants/index.js";
 //getAllContacts
-export const getAllContacts = async ({ page, perPage,sortOrder = SORT_ORDER.ASC, sortBy = '_id',userId,}) => {
-    const limit = perPage;
-    const skip = (page - 1) * perPage;
-    const contactsQuery = ContactsCollection.find({ userId })
-    const contactsCount = await ContactsCollection
-        .find({ userId })
-        .merge(contactsQuery)
-        .countDocuments();
-    const contacts = await contactsQuery
-        .skip(skip)
-        .limit(limit)
-        .sort({ [sortBy]: sortOrder })
-        .exec();
-    const paginationData = calculationPaginationData(contactsCount, perPage, page);
+export const getAllContacts = async ({
+  page = 1,
+  perPage = 10,
+  sortOrder = SORT_ORDER.ASC,
+  sortBy = '_id',
+  filter = {},
+ }) => {
+  const limit = perPage;
+  const skip = (page - 1) * perPage;
 
-    return {
-        data: contacts,
-        ...paginationData,
-    };
-}
+  let contactsQuery = ContactsCollection.find();
+
+  if (filter.userId) {
+    contactsQuery = contactsQuery.where('userId').equals(filter.userId);
+  }
+
+  if (filter.type) {
+    contactsQuery = contactsQuery.where('contactType').equals(filter.type);
+  }
+  if (typeof filter.isFavourite === 'boolean') {
+    contactsQuery = contactsQuery.where('isFavourite').equals(filter.isFavourite);
+  }
+
+  const contactsCount = await ContactsCollection.countDocuments({
+    ...contactsQuery.getFilter(),
+  });
+
+  const contacts = await contactsQuery
+    .skip(skip)
+    .limit(limit)
+    .sort({ [sortBy]: sortOrder })
+    .exec();
+
+  const paginationData = calculationPaginationData (contactsCount, perPage, page);
+
+  return {
+    data: contacts,
+    ...paginationData,
+  };
+};
 //getContactById
-export const getContactById = async (id, userId,) => {
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-        return null;
-    }
-
-    try {
-        const contact = await ContactsCollection.findById({ _id: id, userId });
-        return contact;
-    } catch (error) {
-        console.error('error trying find contact:', error);
-        return null;
-    }
+export const getContactById = async (contactId, userId) => {
+  const contact = await ContactsCollection.findOne({
+    _id: contactId,
+    userId,
+  });
+  return contact;
 };
 //createContact
 export const createContact = async(payload) => {
@@ -61,5 +75,8 @@ export const updateContact = async (contactId, userId, payload, options = {}) =>
 
   if (!rawResult || !rawResult.value) return null;
 
-  return rawResult.value;
+  return {
+    contact: rawResult.value,
+    isNew: Boolean(rawResult?.lastErrorObject?.upserted),
+  };
 };
