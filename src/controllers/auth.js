@@ -13,7 +13,7 @@ export const registerUserController = async (req, res) => {
 };
 import { loginUser } from '../services/auth.js';
 import { logoutUser } from '../services/auth.js';
-
+//login
 export const loginUserController = async (req, res) => {
   const session = await loginUser(req.body);
 
@@ -57,7 +57,7 @@ const setupSession = (res, session) => {
     expires: new Date(Date.now() + ONE_DAY),
   });
 };
-
+//refreshUser
 export const refreshUserSessionController = async (req, res) => {
   const session = await refreshUsersSession({
     sessionId: req.cookies.sessionId,
@@ -74,6 +74,7 @@ export const refreshUserSessionController = async (req, res) => {
     },
   });
 };
+//requestResetEmail
 export const requestResetEmailController = async (req, res) => {
   await requestResetToken(req.body.email);
   res.json({
