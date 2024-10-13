@@ -32,6 +32,7 @@ export const authenticate = async (req, res, next) => {
   return next(createHttpError(401, 'Access token expired'));
 }
   //check userid
+
   console.log('Session:', session);
   console.log('User ID:', session.userId);
   //userId
@@ -44,6 +45,7 @@ export const authenticate = async (req, res, next) => {
   }
 
   req.user = user;
-
+  //res
+  console.log('User set in request:', req.user);
   next();
 };

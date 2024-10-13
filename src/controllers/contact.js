@@ -3,7 +3,8 @@ import createHttpError from 'http-errors';
 import { parsePaginationParams } from "../utils/parsePaginationParams.js";
 import { parseSortParams } from "../utils/parseSortParams.js";
 //getAllContacts
-export const getContactsController = async (req, res,next) => {
+export const getContactsController = async (req, res, next) => {
+
   try {
     const { page, perPage } = parsePaginationParams(req.query);
     const { sortBy, sortOrder } = parseSortParams(req.query);
@@ -14,7 +15,8 @@ export const getContactsController = async (req, res,next) => {
       sortOrder,
       userId: req.user._id,
   });
-
+    //console.log test
+    console.log('User ID in controller:', req.user._id);
     res.json({
       status: 200,
       message: 'Successfully found contacts!',
