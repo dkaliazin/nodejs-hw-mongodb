@@ -63,7 +63,7 @@ export const upsertContactController = async (req, res) => {
 export const patchContactController = async (req, res) => {
 
     const { contactId } = req.params;
-    const result = await updateContact(contactId, req.body);
+    const result = await updateContact({_id: contactId }, req.body);
 
     if (!result) {
       return next(createHttpError(404, 'Contact not found'));
