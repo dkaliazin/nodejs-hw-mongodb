@@ -3,27 +3,24 @@ import createHttpError from 'http-errors';
 import { parsePaginationParams } from "../utils/parsePaginationParams.js";
 import { parseSortParams } from "../utils/parseSortParams.js";
 //getAllContacts
-export const getContactsController = async (req, res,next) => {
-  try {
-    const { page, perPage } = parsePaginationParams(req.query);
-    const { sortBy, sortOrder } = parseSortParams(req.query);
-    const contacts = await getAllContacts({
-      page,
-      perPage,
-      sortBy,
-      sortOrder,
-      userId: req.user._id,
+export const getContactsController = async (req, res, next) => {
+  const { page, perPage } = parsePaginationParams(req.query);
+  const { sortBy, sortOrder } = parseSortParams(req.query);
+
+  const { _id: userId } = req.user;
+
+  const data = await getAllContacts({
+    page,
+    perPage,
+    sortBy,
+    sortOrder,
   });
 
-    res.json({
-      status: 200,
-      message: 'Successfully found contacts!',
-      data: contacts,
-    });
-  }
-  catch (err) {
-    next(err);
-  }
+  res.json({
+    status: 200,
+    message: "Successfully found contacts!",
+    data,
+  });
 };
 //getContactById
 export const getContactByIdController = async (req, res, next,) => {
@@ -75,10 +72,10 @@ export const upsertContactController = async (req, res) => {
   })
 }
 //patchContact
-export const patchContactController = async (req, res,next) => {
-   try {
+export const patchContactController = async (req, res) => {
+
     const { contactId } = req.params;
-    const result = await updateContact(contactId, req.body, {userId: req.user._id});
+    const result = await updateContact({_id: contactId }, req.body);
 
     if (!result) {
       return next(createHttpError(404, 'Contact not found'));
@@ -89,7 +86,5 @@ export const patchContactController = async (req, res,next) => {
       message: 'Successfully patched a contact',
       data: result,
     });
-  } catch (err) {
-    next(err);
-  }
+
 };
