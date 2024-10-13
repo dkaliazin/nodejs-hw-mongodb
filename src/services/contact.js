@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import { calculationPaginationData } from "../utils/calculatePaginationData.js";
 import { SORT_ORDER } from "../constants/index.js";
 //getAllContacts
-export const getAllContacts = async ({ page, perPage,sortOrder = SORT_ORDER.ASC, sortBy = '_id',}) => {
+export const getAllContacts = async ({ page, perPage,sortOrder = SORT_ORDER.ASC, sortBy = '_id',userId,}) => {
     const limit = perPage;
     const skip = (page - 1) * perPage;
     const contactsQuery = ContactsCollection.find({ userId })
@@ -24,7 +24,7 @@ export const getAllContacts = async ({ page, perPage,sortOrder = SORT_ORDER.ASC,
     };
 }
 //getContactById
-export const getContactById = async (id) => {
+export const getContactById = async (id, userId,) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return null;
     }
@@ -43,12 +43,12 @@ export const createContact = async(payload) => {
     return contact;
 }
 //deleteContact
-export const deleteContact = async (contactId) => {
+export const deleteContact = async (contactId, userId,) => {
     const contact = await ContactsCollection.findOneAndDelete({ _id: contactId, userId });
     return contact;
 }
 //updateContact
-export const updateContact = async (contactId, payload, options = {}) => {
+export const updateContact = async (contactId, userId, payload, options = {}) => {
     const contact = await ContactsCollection.findOneAndUpdate(
         { _id: contactId, userId },
         payload,
