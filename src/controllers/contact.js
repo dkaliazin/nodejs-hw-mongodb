@@ -88,17 +88,27 @@ export const upsertContactController = async (req, res, next) => {
 
 //patchContact
 export const patchContactController = async (req, res, next) => {
-  const { id } = req.params;
+  const { contactId } = req.params;
   const { _id: userId } = req.user;
-  const result = await updateContact({_id: id, userId}, req.body);
+  console.log("Contact ID:", contactId );
+  console.log("Request Params:", req.params);
+  console.log("Request URL:", req.url);
+
+  const updatePayload = { ...req.body };
+
+  if (!req.body.phoneNumber) {
+    delete updatePayload.phoneNumber;
+  }
+
+  const result = await updateContact(contactId , userId, updatePayload);
 
   if (!result) {
-    throw createHttpError(404, `Contact with id=${id} not found`);
+    throw createHttpError(404, `Contact with id=${contactId } not found`);
   }
 
   res.json({
     status: 200,
     message: 'Successfully patched the contact!',
-    data: result.data,
+    data: result.contact,
   });
 };
